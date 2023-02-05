@@ -15,9 +15,10 @@ public class TentacleSpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_playerController.Rooted)
+        if (!_playerController.Rooted) return;
+        if (Random.Range(1, 100) < 1)
         {
-            
+                
         }
     }
 }
