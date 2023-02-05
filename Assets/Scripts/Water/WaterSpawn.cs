@@ -7,8 +7,9 @@ namespace Water
 {
     public class WaterSpawn : MonoBehaviour
     {
+        [SerializeField] private WaterPool waterPool;
         [SerializeField] private GameObject[] players;
-        [SerializeField] private GameObject waterPrefab;
+        // [SerializeField] private GameObject waterPrefab;
         [SerializeField] private int cd;
 
         private int _counter;
@@ -18,7 +19,12 @@ namespace Water
         {
             var x = player.transform.position.x;
             var sp = Random.Range(x - 10, x + 10);
-            Instantiate(waterPrefab, new Vector3(sp, transform.position.y), Quaternion.identity);
+            var water = waterPool.GetPooledGameObject();
+            if (!water) return;
+            water.transform.position = new Vector3(sp, transform.position.y);
+            water.SetActive(true);
+
+            // Instantiate(waterPrefab, new Vector3(sp, transform.position.y), Quaternion.identity);
         }
 
         private void Awake()

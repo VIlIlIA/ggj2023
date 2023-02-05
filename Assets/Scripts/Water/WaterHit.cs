@@ -12,12 +12,12 @@ namespace Water
             // Debug.Log("OnCollisionEnter2D");
             if ((groundLayer.value & (1 << col.transform.gameObject.layer)) > 0)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
 
             if (!col.gameObject.CompareTag("Player")) return;
             col.gameObject.GetComponent<PlayerData>().AddWater(6);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

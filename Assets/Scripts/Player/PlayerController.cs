@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using Cinemachine;
 using UnityEngine;
@@ -37,6 +38,8 @@ namespace Player
         private bool _isWallJumping;
 
         private float _zoom;
+
+        public void UnRoot() => Rooted = false;
 
         // Start is called before the first frame update
         private void Start()
@@ -83,7 +86,7 @@ namespace Player
                 }
             }
 
-            if (Input.GetKeyDown(_playerKeybinding.RootKey) && GroundCheck())
+            if (Input.GetKeyDown(_playerKeybinding.RootKey) && GroundCheck() && _playerData.CanHit())
             {
                 _rigidbody2D.velocity = new Vector2(0, 0);
                 Rooted = !Rooted;
@@ -154,8 +157,6 @@ namespace Player
             {
                 _spriteRenderer.flipX = !_spriteRenderer.flipX;
             }
-
-            // Invoke(nameof(StopWallJumping), WallJumpingDuration);
         }
 
         private void WallSlide()

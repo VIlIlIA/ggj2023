@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,12 +20,20 @@ namespace Player
         public int growthPercentage;
 
         private PlayerController _controller;
+        private SpriteRenderer _spriteRenderer;
+        
         private int _counter;
         private int _iFrame;
+        private bool _invincible;
 
-        public bool CanHit() => _iFrame <= 0;
+        public bool CanHit() => !_invincible;
 
-        public void Hit() => _iFrame = invincibleFrame;
+        public void Hit()
+        {
+            _controller.UnRoot();
+            _invincible = true;
+            StartCoroutine(Flash());
+        }
 
         public void AddWater(int amount) => waterAmount = waterAmount + amount > 100 ? 100 : waterAmount + amount;
 
@@ -53,10 +63,25 @@ namespace Player
                 // trigger win condition
             }
         }
+        
+        private IEnumerator Flash()
+        {
+            const float flashDelay = 0.0833f;
+            for (var i = 0; i < 10; i++)
+            {
+                _spriteRenderer.color = new Color(1,1,1,0);
+                yield return new WaitForSeconds(flashDelay);
+                _spriteRenderer.color = new Color(1,1,1,1);
+                yield return new WaitForSeconds(flashDelay);
+            }
+            _invincible = false;
+        }
+
 
         private void Start()
         {
             _controller = GetComponent<PlayerController>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
             _counter = growthCoolDown;
         }
 
